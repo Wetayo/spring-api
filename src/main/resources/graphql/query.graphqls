@@ -1,0 +1,10 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+type Query {
+  getStations(gpsY: Float!, gpsX: Float!, distance: Float!): [Station]
+  getStationAndRoutes(gpsY: Float!, gpsX: Float!, distance: Float!): [StationAndRoute]
+  getRide(stationId: Int!, routeId: Int!): Boolean!
+  getRoutes(regionName: String!): [Route]
+}

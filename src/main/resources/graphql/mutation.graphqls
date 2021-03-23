@@ -1,0 +1,9 @@
+type Mutation {
+  createRide(stationId: Int!, routeId: Int!): Ride!
+  deleteRide(stationId: Int!, routeId: Int!): Boolean!
+}
+
+type Ride {
+  stationId: Int!
+  routeId: Int!
+}

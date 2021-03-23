@@ -1,0 +1,19 @@
+type Station {
+  stationId: Int
+  stationName: String
+  mobileNumber: String
+  distance: Int
+}
+
+type StationAndRoute {
+  stationId: Int
+  stationName: String
+  mobileNumber: String
+  distance: Int
+  routes: [Route]!
+}
+
+type Route {
+  routeId: Int
+  routeNumber: String
+}
