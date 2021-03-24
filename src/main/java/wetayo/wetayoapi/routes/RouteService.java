@@ -1,7 +1,7 @@
 package wetayo.wetayoapi.routes;
 
-import graphql.GraphQLException;
 import org.springframework.stereotype.Service;
+import wetayo.wetayoapi.exceptions.NotFoundException;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class RouteService {
 
     public List<Route> findByRegionNameLike(String regionName) {
         List<Route> routes = routeRepository.findByRegionNameLike("%"+regionName+"%");
-        if(routes.isEmpty()) throw new GraphQLException("Empty");
+        if(routes.isEmpty()) throw new NotFoundException("Query Exception : Not Found RegionName");
 
         return routes;
     }

@@ -11,7 +11,6 @@ public class RouteStationService {
     public RouteStationService(RouteStationRepository routeStationRepository) {
         this.routeStationRepository = routeStationRepository;
     }
-
     public List<RouteStation> findByStationId(Integer id){
         return routeStationRepository.findByStationId(id);
     }

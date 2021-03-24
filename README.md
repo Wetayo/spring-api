@@ -11,60 +11,10 @@ Server Endpoint : http://3.35.30.64/wetayo
 
 1. getStations
 
-   gps 위도, 경도, 측정 범위를 파라미터로 특정 범위내 정류장 정보 조회
-
-   ```js
-   getStations(
-       gpsY: Float!
-       gpsX: Float!
-       distance: Float!
-   ): [Station]
-
-   type Station {
-       stationId: Int
-       stationName: String
-       mobileNumber: String
-       distance: Int
-   }
-   ```
-
-    - 요청 예시
-
-      ```js
-      query{
-          getStations(gpsY: 37.3740667 gpsX: 126.8424833 distance: 0.02){
-            stationId
-            stationName
-            mobileNumber
-            distance
-            }
-      }
-      ```
-
-    - 응답 예시
-
-      ```js
-      {
-      "data": {
-          "getStation": [
-              {
-              "stationId": 224000876,
-              "stationName": "목감호수품애.중흥S클래스",
-              "mobileNumber": "25894",
-              "distance": 0
-              }
-          ]}
-      }
-      ```
-
-<br>
-
-2. getStationAndRoutes
-
    gps 위도, 경도, 측정 범위를 파라미터로 특정 범위내 정류장과 정류장에 속한 버스번호들 조회
 
    ```js
-   getStationAndRoutes(
+   getStations(
        gpsY: Float!
        gpsX: Float!
        distance: Float!
@@ -83,7 +33,7 @@ Server Endpoint : http://3.35.30.64/wetayo
 
       ```js
       query{
-          getStationAndRoutes(gpsY: 37.3740667, gpsX: 126.8424833, distance: 0.02){
+          getStations(gpsY: 37.3740667, gpsX: 126.8424833, distance: 0.02){
               stationId
               stationName
               mobileNumber
@@ -101,7 +51,7 @@ Server Endpoint : http://3.35.30.64/wetayo
       ```js
       {
           "data": {
-              "getStationAndRoute": [
+              "getStations": [
                   {
                       "stationId": 224000876,
                       "stationName": "목감호수품애.중흥S클래스",
@@ -121,7 +71,7 @@ Server Endpoint : http://3.35.30.64/wetayo
 
 <br>
 
-3. getRide
+2. getRide
 
    버스기사가 이용하며 해당 정류장에 탑승을 희망하는 고객이 있는지 boolean 형으로 조회
 
@@ -152,7 +102,7 @@ Server Endpoint : http://3.35.30.64/wetayo
 
 <br>
 
-4. getRoutes
+3. getRoutes
 
    버스기사가 이용하며 지역이름으로 버스노선들 조회
 
@@ -183,7 +133,7 @@ Server Endpoint : http://3.35.30.64/wetayo
       ```js
       {
           "data": {
-              "getRoute": [
+              "getRoutes": [
                   {
                       "routeId": 208000009,
                       "routeNumber": "81"
@@ -265,5 +215,78 @@ Server Endpoint : http://3.35.30.64/wetayo
           "data": {
               "deleteRide": true
           }
+      }
+      ```
+
+<br>
+
+### ◾ 상태 코드
+
+#### 실패 코드
+1. 400
+
+잘못된 요청 (Validation Error)
+   
+   - 응답 예시
+      ```json
+      {
+         "errors": [
+            {
+               "message": "Validation Error : Bad Request",
+               "extensions": {
+                  "errorCode": "400",
+                  "classification": "ValidationError"
+               }
+            }
+         ], 
+        "data": null
+      }
+      ```
+     
+<br>
+
+2. 404 
+
+Not Found Error
+
+   - 응답 예시
+      ```json
+       {
+         "errors": [
+            {
+               "message": "(Mutation)Insert Exception : Not Found Id",
+               "extensions": {
+                  "errorCode": "404",
+                  "classification": "DataFetching Error"
+               }
+            }
+         ],
+         "data": {
+            "createRide": null
+         }
+      }
+      ```
+
+<br>     
+
+3. 430
+
+Aleady Insert Error
+
+   - 응답 예시
+      ```json
+      {
+         "errors": [
+            {
+               "message": "(Mutation)Insert Exception : Already insert",
+               "extensions": {
+                  "errorCode": "430",
+                  "classification": "DataFetching Error"
+               }  
+            }
+         ],
+         "data": {
+            "createRide": null
+         }
       }
       ```

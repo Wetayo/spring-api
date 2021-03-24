@@ -10,7 +10,7 @@ type StationAndRoute {
   stationName: String
   mobileNumber: String
   distance: Int
-  routes: [Route]!
+  routes: [Route]
 }
 
 type Route {

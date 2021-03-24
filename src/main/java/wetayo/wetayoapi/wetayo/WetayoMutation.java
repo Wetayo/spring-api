@@ -1,6 +1,5 @@
 package wetayo.wetayoapi.wetayo;
 
-import graphql.GraphQLException;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,18 +21,13 @@ public class WetayoMutation implements GraphQLMutationResolver {
 
     public RideDto createRide(Integer stationId, Integer routeId) {
         Ride ride = rideService.addRide(stationId,routeId);
-
         log.info("createRide Mutation : " + ride);
         return modelMapper.map(ride,RideDto.class);
     }
 
-    public Boolean deleteRide(Integer stationId, Integer routeId) {
-        try{
-            rideService.deleteRide(stationId,routeId);
-        }catch (GraphQLException e){
-            return false;
-        }
-        log.info("deleteRide Mutation (stationId : " + stationId + ", routeId : " + routeId);
-        return true;
+    public RideDto deleteRide(Integer stationId, Integer routeId) {
+        Ride ride = rideService.deleteRide(stationId,routeId);
+        log.info("deleteRide Mutation : " + ride);
+        return modelMapper.map(ride,RideDto.class);
     }
 }

@@ -1,8 +1,9 @@
 package wetayo.wetayoapi.rides;
 
-import graphql.GraphQLException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import wetayo.wetayoapi.exceptions.AleadyColumnException;
+import wetayo.wetayoapi.exceptions.NotFoundException;
 import wetayo.wetayoapi.routes.Route;
 import wetayo.wetayoapi.routes.RouteRepository;
 import wetayo.wetayoapi.stations.Station;
@@ -23,10 +24,10 @@ public class RideService {
         this.routeRepository = routeRepository;
     }
 
-    public Ride findByStationIdAndRouteId(Integer stationId,Integer routeId) throws GraphQLException{
+    public Ride getRide(Integer stationId,Integer routeId){
         Optional<Ride> ride = rideRepository. findByStationIdAndRouteId(stationId, routeId);
         if(ride.isEmpty()){
-            throw new GraphQLException();
+            throw new NotFoundException("Query Exception : Not Found Id");
         }
         return ride.get();
     }
@@ -36,21 +37,21 @@ public class RideService {
         Optional<Route> route =  routeRepository.findById(routeId);
 
         if(route.isEmpty() || station.isEmpty()){
-            throw new GraphQLException("Insert Exception : Not Found Id");
+            throw new NotFoundException("(Mutation)Insert Exception : Not Found Id");
         }
         Optional<Ride> ride = rideRepository.findByStationIdAndRouteId(stationId, routeId);
         if(ride.isPresent()){
-            throw new GraphQLException("Insert Exception : Already insert");
+            throw new AleadyColumnException("(Mutation)Insert Exception : Already insert");
         }
         return rideRepository.save(Ride.builder().routeId(routeId).stationId(stationId).build());
     }
 
-    public void deleteRide(Integer stationId, Integer routeId) {
-        Optional<Ride> optionalRide = rideRepository. findByStationIdAndRouteId(stationId,routeId);
-        if(optionalRide.isEmpty()){
-            throw new GraphQLException("Delete Exception : Not exist id");
+    public Ride deleteRide(Integer stationId, Integer routeId)  {
+        Optional<Ride> ride = rideRepository. findByStationIdAndRouteId(stationId,routeId);
+        if(ride.isEmpty()){
+            throw new NotFoundException("(Mutation)Delete Exception : Not Found Id");
         }
-
-        rideRepository.delete(optionalRide.get());
+        rideRepository.delete(ride.get());
+        return ride.get();
     }
 }

@@ -1,6 +1,6 @@
 type Mutation {
-  createRide(stationId: Int!, routeId: Int!): Ride!
-  deleteRide(stationId: Int!, routeId: Int!): Boolean!
+  createRide(stationId: Int!, routeId: Int!): Ride
+  deleteRide(stationId: Int!, routeId: Int!): Ride
 }
 
 type Ride {
