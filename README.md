@@ -1,6 +1,6 @@
 ## Wetayo-api
 
-Server Endpoint : http://3.35.30.64/wetayo
+Server Endpoint : https://3.35.30.64/wetayo
 
 <br>
 <br>
