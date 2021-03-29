@@ -1,9 +1,7 @@
 type Mutation {
   createRide(stationId: Int!, routeId: Int!): Ride
   deleteRide(stationId: Int!, routeId: Int!): Ride
+  signInBus(routeId: Int!, plateNumber: String!): Bus
 }
 
-type Ride {
-  stationId: Int!
-  routeId: Int!
-}
+

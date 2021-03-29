@@ -1,9 +1,12 @@
 package wetayo.wetayoapi.wetayo;
 
 import graphql.kickstart.tools.GraphQLQueryResolver;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import wetayo.wetayoapi.context.CustomGraphQLContext;
 import wetayo.wetayoapi.rides.RideService;
 import wetayo.wetayoapi.routeStations.RouteStation;
 import wetayo.wetayoapi.routeStations.RouteStationService;
@@ -38,35 +41,42 @@ public class WetayoQuery implements GraphQLQueryResolver {
         this.routeService = routeService;
     }
 
-    public List<RouteStationGraphQLDto> getStations(Double x, Double y, Double distance) {
+    @PreAuthorize("hasAuthority('user')")
+    public List<RouteStationGraphQLDto> getStations(Double x, Double y, Double distance, DataFetchingEnvironment e) {
         List<Station> stations = stationService.getNearByStations(x, y, distance);
         List<RouteStationGraphQLDto> routeStationDtos = Arrays.asList(modelMapper.map(stations, RouteStationGraphQLDto[].class));
 
-        int index = 0;
-        for (RouteStationGraphQLDto routeStationGraphQLDto : routeStationDtos) {
-            List<RouteStation> routeStations = routeStationService.findByStationId(routeStationGraphQLDto.getStationId());
-            List<RouteDto> routeGraphQLDtos = Arrays.asList(modelMapper.map(routeStations, RouteDto[].class));
-            routeStationGraphQLDto.setRoutes(routeGraphQLDtos);
-            routeStationGraphQLDto.setDistance(GeometryUtil.calculateDistance(x, y,
-                    stations.get(index).getGps().getX(), stations.get(index++).getGps().getY()));
-        }
-        routeStationDtos.sort((o1, o2) -> o1.getDistance().compareTo(o2.getDistance()));
-        log.info("getStationAndRoutes Query : " + routeStationDtos);
+        CustomGraphQLContext context = e.getContext();
+        log.info(context.getApiKey());
 
+        if(e.getSelectionSet().contains("routes")) {
+            int index = 0;
+            for (RouteStationGraphQLDto routeStationGraphQLDto : routeStationDtos) {
+                List<RouteStation> routeStations = routeStationService.findByStationId(routeStationGraphQLDto.getStationId());
+                List<RouteDto> routeGraphQLDtos = Arrays.asList(modelMapper.map(routeStations, RouteDto[].class));
+                routeStationGraphQLDto.setRoutes(routeGraphQLDtos);
+                routeStationGraphQLDto.setDistance(GeometryUtil.calculateDistance(x, y,
+                        stations.get(index).getGps().getX(), stations.get(index++).getGps().getY()));
+            }
+            routeStationDtos.sort((o1, o2) -> o1.getDistance().compareTo(o2.getDistance()));
+            log.info("Query Stations (요청 gps : " + x + ", " + y + ") = " + routeStationDtos);
+        }
         return routeStationDtos;
     }
 
+    @PreAuthorize("hasAuthority('bus')")
     public boolean getRide(Integer stationId, Integer routeId) {
         rideService.getRide(stationId, routeId);
-        log.info("getRide Query( stationId : " + stationId + ", routeId : " + routeId );
+        log.info("Query Ride(stationId : " + stationId + ", routeId : " + routeId );
         return true;
     }
 
+    @PreAuthorize("hasAuthority('user')")
     public List<RouteDto> getRoutes(String regionName) {
-        List<Route> routes = routeService.findByRegionNameLike("%" + regionName + "%");;
+        List<Route> routes = routeService.getRoutes("%" + regionName + "%");;
         List<RouteDto> routeDtos = Arrays.asList(modelMapper.map(routes, RouteDto[].class));;
 
-        log.info("getRoutes Query : " + routeDtos);
+        log.info("Query Routes (요청 지역 이름 : " + regionName + ") = " + routeDtos);
         return routeDtos;
     }
 }

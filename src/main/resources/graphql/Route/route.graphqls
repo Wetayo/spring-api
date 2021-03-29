@@ -1,0 +1,4 @@
+type Route {
+    routeId: Int
+    routeNumber: String
+}

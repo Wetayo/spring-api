@@ -20,8 +20,6 @@ public class StationService {
     private final EntityManager entityManager;
 
     public List<Station> getNearByStations(Double gpsX, Double gpsY, Double distance) {
-        log.info("요청 gps 좌표 : " +gpsX + " " + gpsY );
-
         Location northEast = GeometryUtil
                 .calculateRangeGps(gpsX, gpsY, distance, Direction.NORTHEAST.getBearing() - 23.44);
         Location southWest = GeometryUtil

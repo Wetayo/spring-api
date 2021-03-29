@@ -1,0 +1,6 @@
+type Bus {
+    routeId: Int!
+    plateNumber: String!
+    routeName: String
+    token: String
+}

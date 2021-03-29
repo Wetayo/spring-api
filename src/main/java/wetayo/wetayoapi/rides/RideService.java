@@ -27,7 +27,7 @@ public class RideService {
     public Ride getRide(Integer stationId,Integer routeId){
         Optional<Ride> ride = rideRepository. findByStationIdAndRouteId(stationId, routeId);
         if(ride.isEmpty()){
-            throw new NotFoundException("Query Exception : Not Found Id");
+            throw new NotFoundException("Query Exception : Not Found Id (404)");
         }
         return ride.get();
     }
@@ -37,11 +37,11 @@ public class RideService {
         Optional<Route> route =  routeRepository.findById(routeId);
 
         if(route.isEmpty() || station.isEmpty()){
-            throw new NotFoundException("(Mutation)Insert Exception : Not Found Id");
+            throw new NotFoundException("(Mutation)Insert Exception : Not Found Id (404)");
         }
         Optional<Ride> ride = rideRepository.findByStationIdAndRouteId(stationId, routeId);
         if(ride.isPresent()){
-            throw new AleadyColumnException("(Mutation)Insert Exception : Already insert");
+            throw new AleadyColumnException("(Mutation)Insert Exception : Already insert (430)");
         }
         return rideRepository.save(Ride.builder().routeId(routeId).stationId(stationId).build());
     }
@@ -49,7 +49,7 @@ public class RideService {
     public Ride deleteRide(Integer stationId, Integer routeId)  {
         Optional<Ride> ride = rideRepository. findByStationIdAndRouteId(stationId,routeId);
         if(ride.isEmpty()){
-            throw new NotFoundException("(Mutation)Delete Exception : Not Found Id");
+            throw new NotFoundException("(Mutation)Delete Exception : Not Found Id (404)");
         }
         rideRepository.delete(ride.get());
         return ride.get();

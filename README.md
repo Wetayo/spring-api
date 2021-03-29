@@ -25,49 +25,49 @@ Server Endpoint : https://3.35.30.64/wetayo
        stationName: String
        mobileNumber: String
        distance: Int
-       routes: [Route]!
+       routes: [Route]
    }
    ```
 
-    - 요청 예시
+   - 요청 예시
 
-      ```js
-      query{
-          getStations(gpsY: 37.3740667, gpsX: 126.8424833, distance: 0.02){
-              stationId
-              stationName
-              mobileNumber
-              distance
-                routes{
-                routeId
-                routeNumber
-              }
-          }
-      }
-      ```
+     ```js
+     query{
+         getStations(gpsY: 37.3740667, gpsX: 126.8424833, distance: 0.02){
+             stationId
+             stationName
+             mobileNumber
+             distance
+               routes{
+               routeId
+               routeNumber
+             }
+         }
+     }
+     ```
 
-    - 응답 예시
+   - 응답 예시
 
-      ```js
-      {
-          "data": {
-              "getStations": [
-                  {
-                      "stationId": 224000876,
-                      "stationName": "목감호수품애.중흥S클래스",
-                      "mobileNumber": "25894",
-                      "distance": 0,
-                      "routes": [
-                          {
-                              "routeId": 208000009,
-                              "routeNumber": "81"
-                          }
-                      ]
-                  }
-              ]
-          }
-      }
-      ```
+     ```js
+     {
+         "data": {
+             "getStations": [
+                 {
+                     "stationId": 224000876,
+                     "stationName": "목감호수품애.중흥S클래스",
+                     "mobileNumber": "25894",
+                     "distance": 0,
+                     "routes": [
+                         {
+                             "routeId": 208000009,
+                             "routeNumber": "81"
+                         }
+                     ]
+                 }
+             ]
+         }
+     }
+     ```
 
 <br>
 
@@ -82,23 +82,23 @@ Server Endpoint : https://3.35.30.64/wetayo
    ): Boolean!
    ```
 
-    - 요청 예시
+   - 요청 예시
 
-      ```js
-      query{
-          getRide(stationId: 224000876 routeId: 208000008)
-      }
-      ```
+     ```js
+     query{
+         getRide(stationId: 224000876 routeId: 208000008)
+     }
+     ```
 
-    - 응답 예시
+   - 응답 예시
 
-      ```js
-      {
-          "data": {
-              "getRide": false
-          }
-      }
-      ```
+     ```js
+     {
+         "data": {
+             "getRide": false
+         }
+     }
+     ```
 
 <br>
 
@@ -117,31 +117,31 @@ Server Endpoint : https://3.35.30.64/wetayo
    }
    ```
 
-    - 요청 예시
+   - 요청 예시
 
-      ```js
-      query{
-          getRoutes(regionName: "시흥"){
-              routeId
-              routeNumber
-          }
-      }
-      ```
+     ```js
+     query{
+         getRoutes(regionName: "시흥"){
+             routeId
+             routeNumber
+         }
+     }
+     ```
 
-    - 응답 예시
+   - 응답 예시
 
-      ```js
-      {
-          "data": {
-              "getRoutes": [
-                  {
-                      "routeId": 208000009,
-                      "routeNumber": "81"
-                  }
-              ]
-          }
-      }
-      ```
+     ```js
+     {
+         "data": {
+             "getRoutes": [
+                 {
+                     "routeId": 208000009,
+                     "routeNumber": "81"
+                 }
+             ]
+         }
+     }
+     ```
 
 <br><br>
 
@@ -153,8 +153,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    ```js
    createRide(
-       stationId: Int
-       routeId: Int
+       stationId: Int!
+       routeId: Int!
    ): Ride!
 
    type Ride {
@@ -163,29 +163,29 @@ Server Endpoint : https://3.35.30.64/wetayo
    }
    ```
 
-    - 요청 예시
+   - 요청 예시
 
-      ```js
-      mutation{
-          createRide(stationId: 224000876 routeId:    208000009){
-              stationId
-              routeId
-          }
-      }
-      ```
+     ```js
+     mutation{
+         createRide(stationId: 224000876 routeId: 208000009){
+             stationId
+             routeId
+         }
+     }
+     ```
 
-    - 응답 예시
+   - 응답 예시
 
-      ```js
-      {
-          "data": {
-              "createRide": {
-                  "stationId": 224000876,
-                  "routeId": 208000009
-              }
-          }
-      }
-      ```
+     ```js
+     {
+         "data": {
+             "createRide": {
+                 "stationId": 224000876,
+                 "routeId": 208000009
+             }
+         }
+     }
+     ```
 
 <br>
 
@@ -195,98 +195,116 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    ```js
    deleteRide(
-       stationId: Int
-       routeId: Int
+       stationId: Int!
+       routeId: Int!
    ): Boolean!
    ```
 
-    - 요청 예시
+   - 요청 예시
 
-      ```js
-      mutation{
-          deleteRide(stationId: 224000876 routeId: 208000009)
-      }
-      ```
+     ```js
+     mutation{
+         deleteRide(stationId: 224000876 routeId: 208000009)
+     }
+     ```
 
-    - 응답 예시
+   - 응답 예시
 
-      ```js
-      {
-          "data": {
-              "deleteRide": true
-          }
-      }
-      ```
+     ```js
+     {
+         "data": {
+             "deleteRide": true
+         }
+     }
+     ```
 
 <br>
 
 ### ◾ 상태 코드
 
 #### 실패 코드
+
 1. 400
 
-잘못된 요청 (Validation Error)
-   
+   잘못된 요청 (Validation Error)
+
    - 응답 예시
-      ```json
-      {
-         "errors": [
-            {
-               "message": "Validation Error : Bad Request",
-               "extensions": {
-                  "errorCode": "400",
-                  "classification": "ValidationError"
-               }
-            }
-         ], 
-        "data": null
-      }
-      ```
-     
+     ```json
+     {
+       "errors": [
+         {
+           "message": "Validation Error : Bad Request",
+           "extensions": {
+             "errorCode": "400",
+             "classification": "ValidationError"
+           }
+         }
+       ],
+       "data": null
+     }
+     ```
+
 <br>
 
-2. 404 
+2. 403
 
-Not Found Error
-
-   - 응답 예시
-      ```json
-       {
-         "errors": [
-            {
-               "message": "(Mutation)Insert Exception : Not Found Id",
-               "extensions": {
-                  "errorCode": "404",
-                  "classification": "DataFetching Error"
-               }
-            }
-         ],
-         "data": {
-            "createRide": null
-         }
-      }
-      ```
-
-<br>     
-
-3. 430
-
-Aleady Insert Error
+   허가되지 않은 요청 (Forbidden)
 
    - 응답 예시
-      ```json
-      {
-         "errors": [
-            {
-               "message": "(Mutation)Insert Exception : Already insert",
-               "extensions": {
-                  "errorCode": "430",
-                  "classification": "DataFetching Error"
-               }  
-            }
-         ],
-         "data": {
-            "createRide": null
+     ```json
+     {
+       "errors": [
+         {
+           "message": "Forbidden Error : 허가되지 않은 요청",
+           "extensions": {
+             "errorCode": "403",
+             "classification": "Forbidden Error"
+           }
          }
-      }
-      ```
+       ],
+       "data": null
+     }
+     ```
+
+3. 404
+
+   Not Found Error
+
+   - 응답 예시
+     ```json
+     {
+       "errors": [
+         {
+           "message": "(Mutation)Insert Exception : Not Found Id",
+           "extensions": {
+             "errorCode": "404",
+             "classification": "DataFetching Error"
+           }
+         }
+       ],
+       "data": null
+     }
+     ```
+
+<br>
+
+4. 430
+
+   Aleady Insert Error
+
+   - 응답 예시
+
+     ```json
+     {
+       "errors": [
+         {
+           "message": "(Mutation)Insert Exception : Already insert",
+           "extensions": {
+             "errorCode": "430",
+             "classification": "DataFetching Error"
+           }
+         }
+       ],
+       "data": null
+     }
+     ```
