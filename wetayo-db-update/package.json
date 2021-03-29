@@ -1,0 +1,17 @@
+{
+  "name": "wetayo-db-update",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gowoonsori",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "xml2json": "^0.12.0"
+  }
+}
