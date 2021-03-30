@@ -6,6 +6,8 @@ import graphql.kickstart.execution.error.GraphQLErrorHandler;
 import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import wetayo.wetayoapi.exceptions.errors.BadRequestError;
+import wetayo.wetayoapi.exceptions.errors.ForbiddenError;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +26,11 @@ public class GraphQLErrorHandlerImpl implements GraphQLErrorHandler {
             ExceptionWhileDataFetching exceptionError = (ExceptionWhileDataFetching) error;
             if (exceptionError.getException() instanceof GraphQLError) {
                 return (GraphQLError) exceptionError.getException();
+            }else if(exceptionError.getException() instanceof RuntimeException){
+                return new ForbiddenError();
             }
         }else if(error instanceof ValidationError){
-            BadRequestError customError = new BadRequestError();
-            return customError;
+            return new BadRequestError();
         }
         return error;
     }

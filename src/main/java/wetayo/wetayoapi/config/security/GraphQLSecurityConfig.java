@@ -3,15 +3,16 @@ package wetayo.wetayoapi.config.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import wetayo.wetayoapi.config.properties.AuthProperties;
+import wetayo.wetayoapi.config.security.filters.ApiKeyAuthenticationFilter;
+import wetayo.wetayoapi.config.security.filters.RequestHeadersPreAuthenticationFilter;
 
 import javax.servlet.Filter;
 
@@ -23,37 +24,24 @@ import javax.servlet.Filter;
         prePostEnabled = true)
 @RequiredArgsConstructor
 public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    /**
-     * Chapter 31: Spring Security Pre-Auth
-     * When using pre-auth, you must ensure that all the graphql requests have been previously
-     * authorized/authenticated by an upstream service.
-     * For example, all ingress traffic to this graphql server must bypass an upstream proxy node that will validate
-     * the request's JWT token. This code alone performs no authorization. Read more about Pre-auth before using this.
-     */
-
-    /**
-     * Using pre-auth headers provide you the ability to switch or support other authentication methods
-     * without making any/many application code changes. (E.g. JWT to something else)
-     */
-    public static final String USER_ID_PRE_AUTH_HEADER = "api_key";
     public static final String USER_ROLES_PRE_AUTH_HEADER = "roles";
+    public static final String USER_ID_PRE_AUTH_HEADER = "api_key";
 
-    private final PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider;
+    //private final PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider;
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
-        authenticationManagerBuilder.authenticationProvider(preAuthenticatedAuthenticationProvider);
-    }
+    private final AuthProperties authProperties;
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.info("Configuring spring security");
 
         http
-                // Add the Pre Authentication Filter
-                .addFilterBefore(createRequestHeadersPreAuthenticationFilter(),
-                        AbstractPreAuthenticatedProcessingFilter.class)
+                // api-key auth
+                .addFilterBefore(new ApiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                // oAuth와 같은 인증과 같이 SecurityContextpersistencefilter전에 헤더 인증
+                //.addFilterBefore(createRequestHeadersPreAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .authorizeRequests()
                 // All endpoints require authentication
                 .anyRequest().authenticated()
@@ -75,6 +63,7 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         // Permit actuator health endpoint for uptime checks etc
         //web.ignoring().antMatchers("/actuator/health");
+        web.ignoring().antMatchers("/playground");
     }
 
     private Filter createRequestHeadersPreAuthenticationFilter() throws Exception {
@@ -84,5 +73,4 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setContinueFilterChainOnUnsuccessfulAuthentication(false);
         return filter;
     }
-
 }

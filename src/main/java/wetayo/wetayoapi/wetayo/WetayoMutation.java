@@ -46,7 +46,7 @@ public class WetayoMutation implements GraphQLMutationResolver {
         return rideDto;
     }
 
-    @PreAuthorize("hasAuthority('anonymous')")
+    @PreAuthorize("hasAuthority('bus')")
     public BusDto signInBus(Integer routeId, String plateNumber){
         Bus bus = busService.getBus(plateNumber);
         Route route = routeService.getRoute(routeId);
