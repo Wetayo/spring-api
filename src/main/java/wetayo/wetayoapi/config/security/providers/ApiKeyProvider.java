@@ -20,14 +20,10 @@ public class ApiKeyProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if(authentication.isAuthenticated()) return authentication;
-        if(authentication.getPrincipal().toString().equals(authProperties.getApiKey().get("user"))){
-            ApiKeyAuthenticationToken token = new ApiKeyAuthenticationToken(AuthorityUtils.createAuthorityList("user"),authentication.getPrincipal().toString());
-            token.setAuthenticated(true);
-            return token;
-        }else if(authentication.getPrincipal().toString().equals(authProperties.getApiKey().get("bus"))){
-            ApiKeyAuthenticationToken token = new ApiKeyAuthenticationToken(AuthorityUtils.createAuthorityList("bus"),authentication.getPrincipal().toString());
-            token.setAuthenticated(true);
-            return token;
+        if(authentication.getCredentials().toString().equals(authProperties.getApiKey().get("user"))){
+            return new ApiKeyAuthenticationToken(AuthorityUtils.createAuthorityList("user"),authentication.getCredentials().toString());
+        }else if(authentication.getCredentials().toString().equals(authProperties.getApiKey().get("bus"))){
+            return new ApiKeyAuthenticationToken(AuthorityUtils.createAuthorityList("bus"),authentication.getCredentials().toString());
         }
         else throw new AccessDeniedException("invalid api-key");
     }

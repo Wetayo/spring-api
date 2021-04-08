@@ -1,6 +1,6 @@
 package wetayo.wetayoapi.utils;
 
-import static java.lang.Math.acos;
+import static java.lang.Math.*;
 
 public class GeometryUtil {
     public static Location calculateRangeGps(Double baseX, Double baseY, Double distance,

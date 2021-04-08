@@ -19,7 +19,7 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
     public GraphQLContext build(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse) {
 
-        var apiKey = httpServletRequest.getHeader("api_key");
+        var apiKey = httpServletRequest.getHeader("api-key");
 
         var context = DefaultGraphQLServletContext.createServletContext()
                 .with(httpServletRequest)

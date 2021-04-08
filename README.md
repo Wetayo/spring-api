@@ -1,6 +1,6 @@
 ## Wetayo-api
 
-Server Endpoint : https://3.35.30.64/wetayo
+Server Endpoint : https://wetayo.club/wetayo
 
 <br>
 <br>
@@ -13,7 +13,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    gps 위도, 경도, 측정 범위를 파라미터로 특정 범위내 정류장과 정류장에 속한 버스번호들 조회
 
-   ```js
+    - schema
+   ```graphql
    getStations(
        gpsY: Float!
        gpsX: Float!
@@ -30,8 +31,7 @@ Server Endpoint : https://3.35.30.64/wetayo
    ```
 
    - 요청 예시
-
-     ```js
+   ```graphql
      query{
          getStations(gpsY: 37.3740667, gpsX: 126.8424833, distance: 0.02){
              stationId
@@ -44,11 +44,10 @@ Server Endpoint : https://3.35.30.64/wetayo
              }
          }
      }
-     ```
+   ```
 
    - 응답 예시
-
-     ```js
+   ```json
      {
          "data": {
              "getStations": [
@@ -67,7 +66,7 @@ Server Endpoint : https://3.35.30.64/wetayo
              ]
          }
      }
-     ```
+   ```
 
 <br>
 
@@ -75,7 +74,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    버스기사가 이용하며 해당 정류장에 탑승을 희망하는 고객이 있는지 boolean 형으로 조회
 
-   ```js
+    - schema
+   ```graphql
    getRide(
        stationId: Int!
        routeId: Int!
@@ -83,22 +83,20 @@ Server Endpoint : https://3.35.30.64/wetayo
    ```
 
    - 요청 예시
-
-     ```js
+   ```graphql
      query{
          getRide(stationId: 224000876 routeId: 208000008)
      }
-     ```
+   ```
 
    - 응답 예시
-
-     ```js
+   ```json
      {
          "data": {
              "getRide": false
          }
      }
-     ```
+   ```
 
 <br>
 
@@ -106,7 +104,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    버스기사가 이용하며 지역이름으로 버스노선들 조회
 
-   ```js
+    - schema
+   ```graphql
    getRoutes(
        regionName: String!
    ): [Route]
@@ -118,19 +117,17 @@ Server Endpoint : https://3.35.30.64/wetayo
    ```
 
    - 요청 예시
-
-     ```js
+   ```graphql
      query{
          getRoutes(regionName: "시흥"){
              routeId
              routeNumber
          }
      }
-     ```
+   ```
 
    - 응답 예시
-
-     ```js
+   ```json
      {
          "data": {
              "getRoutes": [
@@ -141,7 +138,7 @@ Server Endpoint : https://3.35.30.64/wetayo
              ]
          }
      }
-     ```
+   ```
 
 <br><br>
 
@@ -151,7 +148,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    사용자가 특정 정류장의 버스노선을 탑승하고자 선택하는 이벤트
 
-   ```js
+    - schema
+   ```graphql
    createRide(
        stationId: Int!
        routeId: Int!
@@ -164,19 +162,17 @@ Server Endpoint : https://3.35.30.64/wetayo
    ```
 
    - 요청 예시
-
-     ```js
+   ```graphql
      mutation{
          createRide(stationId: 224000876 routeId: 208000009){
              stationId
              routeId
          }
      }
-     ```
+   ```
 
    - 응답 예시
-
-     ```js
+   ```json
      {
          "data": {
              "createRide": {
@@ -185,7 +181,7 @@ Server Endpoint : https://3.35.30.64/wetayo
              }
          }
      }
-     ```
+   ```
 
 <br>
 
@@ -193,7 +189,8 @@ Server Endpoint : https://3.35.30.64/wetayo
 
    기사가 이용하며 탑승희망자를 삭제하는 이벤트
 
-   ```js
+    - schema
+   ```graphql
    deleteRide(
        stationId: Int!
        routeId: Int!
@@ -201,24 +198,67 @@ Server Endpoint : https://3.35.30.64/wetayo
    ```
 
    - 요청 예시
-
-     ```js
+   ```graphql
      mutation{
          deleteRide(stationId: 224000876 routeId: 208000009)
      }
-     ```
+   ```
 
    - 응답 예시
-
-     ```js
+   ```json
      {
          "data": {
              "deleteRide": true
          }
      }
-     ```
+   ```
 
 <br>
+
+3. signInBus
+
+    기사 로그인 mutation
+
+   - schema
+   
+    ```graphql
+    signInBus(
+        routeId: Int!
+        plateNumber: String!
+    ): Bus
+   
+   type Bus {
+        routeId: Int!
+        plateNumber: String!
+        routeName: String
+        token: String
+    }
+    ```
+   - 요청 예시
+    ```graphql
+    mutation{
+        signInBus(routeId: 208000009 plateNumber: "경기70바2500"){
+            routeId
+            plateNumber
+            routeName
+            token
+        }
+    }
+    ```
+   
+    - 응답 예시
+    ```json
+    {
+        "data": {
+            "signInBus": {
+                "routeId": 208000009,
+                "plateNumber": "경기70바2500",
+                "routeName": "81",
+                "token": ""
+            }
+        }
+    }
+    ```
 
 ### ◾ 상태 코드
 

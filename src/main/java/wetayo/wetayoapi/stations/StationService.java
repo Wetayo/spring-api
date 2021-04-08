@@ -21,9 +21,9 @@ public class StationService {
 
     public List<Station> getNearByStations(Double gpsX, Double gpsY, Double distance) {
         Location northEast = GeometryUtil
-                .calculateRangeGps(gpsX, gpsY, distance, Direction.NORTHEAST.getBearing() - 23.44);
+                .calculateRangeGps(gpsX, gpsY, distance, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil
-                .calculateRangeGps(gpsX, gpsY, distance, Direction.SOUTHWEST.getBearing() - 23.44 );
+                .calculateRangeGps(gpsX, gpsY, distance, Direction.SOUTHWEST.getBearing());
 
         double x1 = northEast.getGpsX();
         double y1 = northEast.getGpsY();

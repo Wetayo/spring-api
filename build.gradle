@@ -26,6 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //web
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     // graphql
     implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0'
     implementation 'com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0'
@@ -47,10 +50,7 @@ dependencies {
     //modelmapper
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.0'
 
-    //hateoas
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder
+    //logback - json parser
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
 
     //actuator
@@ -58,7 +58,13 @@ dependencies {
 
     //spring security
     compile "org.springframework.boot:spring-boot-starter-security"
+//    compile 'io.jsonwebtoken:jjwt-api:0.11.2'
+//    runtime 'io.jsonwebtoken:jjwt-impl:0.11.2',
+//            // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
+//            //'org.bouncycastle:bcprov-jdk15on:1.60',
+//            'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
 }
+
 
 
 test {
